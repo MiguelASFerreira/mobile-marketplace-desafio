@@ -1,27 +1,29 @@
 export default {
   COLORS: {
     // Orange
-    ORANGE_500: "#D9480F",
+    ORANGE_BASE: "#F2400D",
+    ORANGE_DARK: "#C43C08",
 
     // Blue
-    BLUE_100: "#D0EBFF",
-    BLUE_300: "#74C0FC",
-    BLUE_500: "#228BE6",
+    BLUE_LIGHT: "#D7F7FF",
+    BLUE_BASE: "#5EC5FD",
+    BLUE_DARK: "#009CF0",
 
-    // Beige
-    BEIGE_100: "#FFF9F0",
-    BEIGE_500: "#F8F0E3",
+    // Shape
+    WHITE: "#FFFFFF",
+    BACKGROUND: "#FBF4F4",
+    SHAPE: "#F5EAEA",
 
-    // Gray
-    GRAY_100: "#F1F3F5",
-    GRAY_300: "#DDE2E5",
-    GRAY_500: "#ADB5BD",
-    GRAY_700: "#495057",
-    GRAY_900: "#212529",
+    // Grayscale
+    GRAY_100: "#ADADAD",
+    GRAY_200: "#949494",
+    GRAY_300: "#666666",
+    GRAY_400: "#3D3D3D",
+    GRAY_500: "#1D1D1D",
 
-    // State
-    ERROR: "#FA5252",
-    SUCCESS: "#40C057"
+    // Semantic
+    DANGER: "#DC3545",
+    SUCCESS: "#28A745"
   },
 
   FONT_FAMILY: {

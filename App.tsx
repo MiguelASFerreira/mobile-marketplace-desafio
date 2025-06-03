@@ -8,6 +8,7 @@ import {
 
 import theme from "./src/theme";
 import { ThemeProvider } from "styled-components";
+import { Loading } from "@components/Loading/";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -15,17 +16,18 @@ export default function App() {
     Poppins_400Regular,
     Poppins_500Medium,
   });
+
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar 
-        barStyle="light-content"
+      <StatusBar
+        barStyle="dark-content"
         backgroundColor="transparent"
         translucent
       />
       {fontsLoaded ? (
         <Text>Open up App.tsx to start working on your app!</Text>
       ) : (
-        <Text>Loading...</Text>
+        <Loading />
       )}
     </ThemeProvider>
   );
