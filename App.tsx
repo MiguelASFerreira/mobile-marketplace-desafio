@@ -1,4 +1,4 @@
-import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "react-native";
 import { Text } from "react-native";
 import { useFonts, DMSans_700Bold } from "@expo-google-fonts/dm-sans";
 import {
@@ -17,7 +17,11 @@ export default function App() {
   });
   return (
     <ThemeProvider theme={theme}>
-      <StatusBar style="auto" />
+      <StatusBar 
+        barStyle="light-content"
+        backgroundColor="transparent"
+        translucent
+      />
       {fontsLoaded ? (
         <Text>Open up App.tsx to start working on your app!</Text>
       ) : (
