@@ -1,14 +1,15 @@
 import { StatusBar } from "react-native";
-import { Text } from "react-native";
+import { ThemeProvider } from "styled-components";
 import { useFonts, DMSans_700Bold } from "@expo-google-fonts/dm-sans";
 import {
   Poppins_400Regular,
   Poppins_500Medium,
 } from "@expo-google-fonts/poppins";
 
-import theme from "./src/theme";
-import { ThemeProvider } from "styled-components";
 import { Loading } from "@components/Loading/";
+import { SignIn } from "@screens/SignIn";
+
+import theme from "./src/theme";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,11 +25,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {fontsLoaded ? (
-        <Text>Open up App.tsx to start working on your app!</Text>
-      ) : (
-        <Loading />
-      )}
+      {fontsLoaded ? <SignIn /> : <Loading />}
     </ThemeProvider>
   );
 }
