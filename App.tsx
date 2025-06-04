@@ -8,7 +8,7 @@ import {
 
 import { Loading } from "@components/Loading/";
 
-import { SignUp } from "@screens/SignUp";
+import { Home } from "@screens/Home";
 
 import theme from "./src/theme";
 
@@ -26,7 +26,7 @@ export default function App() {
         backgroundColor="transparent"
         translucent
       />
-      {fontsLoaded ? <SignUp /> : <Loading />}
+      {fontsLoaded ? <Home /> : <Loading />}
     </ThemeProvider>
   );
 }

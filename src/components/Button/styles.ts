@@ -35,7 +35,7 @@ export const Container = styled.TouchableOpacity<ContainerProps>`
           padding: 0 16px;
         `
       : css`
-          height: 36px;
+          height: 40px;
           padding: 0 12px;
         `}
 `;
