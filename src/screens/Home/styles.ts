@@ -45,7 +45,7 @@ export const ProfileViewText = styled.Text`
 `;
 
 export const SearchTitle = styled.Text`
-  padding-top: 32px;
+  padding: 32px 24px 0;
   font-family: ${({ theme }) => theme.FONT_FAMILY.REGULAR};
   font-size: ${({ theme }) => theme.FONT_SIZE.TEXT_SM}px;
 `;
@@ -54,11 +54,10 @@ export const SearchContent = styled.View`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  padding: 0 24px;
   margin-top: 10px;
-  width: 90%;
   gap: 12px;
 `;
-
 
 export const FilterButton = styled(TouchableOpacity)`
   width: 44px;
@@ -67,4 +66,9 @@ export const FilterButton = styled(TouchableOpacity)`
   border-radius: 12px;
   align-items: center;
   justify-content: center;
+`;
+
+
+export const InputWrapper = styled.View`
+  flex: 1;
 `;

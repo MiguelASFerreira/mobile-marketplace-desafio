@@ -10,6 +10,7 @@ import {
   SearchTitle,
   SearchContent,
   FilterButton,
+  InputWrapper,
 } from "./styles";
 import { useTheme } from "styled-components/native";
 import { Input } from "@components/Input";
@@ -96,7 +97,9 @@ export function Home() {
 
       <SearchTitle>Explore produtos</SearchTitle>
       <SearchContent>
-        <Input placeholder="Pesquisar" LeftIcon={Search} />
+        <InputWrapper>
+          <Input placeholder="Pesquisar" LeftIcon={Search} />
+        </InputWrapper>
 
         <FilterButton>
           <Funnel size={20} color={theme.COLORS.ORANGE_BASE} />
@@ -113,10 +116,9 @@ export function Home() {
           gap: "8%",
           width: "100%",
           marginBottom: 8,
-          justifyContent: "space-between"
+          justifyContent: "space-between",
         }}
         showsVerticalScrollIndicator={false}
-        
       />
     </Container>
   );
