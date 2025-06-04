@@ -1,5 +1,6 @@
 import styled, { css } from "styled-components/native";
 import { ButtonVariant, ButtonSize } from "./";
+import { TouchableOpacity } from "react-native";
 
 interface ContainerProps {
   variant: ButtonVariant;
@@ -11,7 +12,7 @@ interface ContentProps {
   alignRight?: boolean;
 }
 
-export const Container = styled.TouchableOpacity<ContainerProps>`
+export const Container = styled(TouchableOpacity)<ContainerProps>`
   flex-direction: row;
   align-items: center;
   border-radius: 8px;

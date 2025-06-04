@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native";
+import { AuthNavigationRoutesProps } from "@routes/auth.routes";
 import { ArrowRight, Lock, Mail } from "lucide-react-native";
 import {
   Container,
@@ -16,6 +18,12 @@ import { PasswordInput } from "@components/PasswordInput";
 import { Button } from "@components/Button";
 
 export function SignIn() {
+  const navigation = useNavigation<AuthNavigationRoutesProps>();
+
+  function handleNewAccount() {
+    navigation.navigate("signUp");
+  }
+
   return (
     <Container>
       <Content>
@@ -42,7 +50,7 @@ export function SignIn() {
 
       <Footer>
         <FooterText>Ainda não tem uma conta?</FooterText>
-        <Button title="Cadastrar" variant="outline" RightIcon={ArrowRight} />
+        <Button title="Cadastrar" variant="outline" RightIcon={ArrowRight} onPress={handleNewAccount} />
       </Footer>
     </Container>
   );

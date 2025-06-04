@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { ArrowRight, Lock, Mail, Phone, User } from "lucide-react-native";
 import {
   Container,
@@ -19,6 +20,12 @@ import { FileInput } from "@components/FileInput";
 import { ScrollView } from "react-native";
 
 export function SignUp() {
+  const navigation = useNavigation();
+
+  function handleGoBack() {
+    navigation.goBack();
+  }
+
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
       <Container>
@@ -71,7 +78,7 @@ export function SignUp() {
 
         <Footer>
           <FooterText>Ainda não tem uma conta?</FooterText>
-          <Button title="Cadastrar" variant="outline" RightIcon={ArrowRight} />
+          <Button title="Acessar" variant="outline" RightIcon={ArrowRight} onPress={handleGoBack} />
         </Footer>
       </Container>
     </ScrollView>
