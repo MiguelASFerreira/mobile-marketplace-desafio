@@ -16,6 +16,11 @@ import { useTheme } from "styled-components/native";
 import { Input } from "@components/Input";
 import { FlatList } from "react-native";
 import { ProductCard } from "./components/ProductCard";
+import {
+  FilterBottomSheet,
+  FilterBottomSheetRefProps,
+} from "./components/FilterSheet";
+import { useRef } from "react";
 
 const data = [
   {
@@ -77,6 +82,13 @@ const data = [
 
 export function Home() {
   const theme = useTheme();
+
+  const filterBottomSheetRef = useRef<FilterBottomSheetRefProps>(null);
+
+  function handleOpenFiltersModal() {
+    filterBottomSheetRef.current?.open();
+  }
+
   return (
     <Container>
       <Header>
@@ -101,7 +113,7 @@ export function Home() {
           <Input placeholder="Pesquisar" LeftIcon={Search} />
         </InputWrapper>
 
-        <FilterButton>
+        <FilterButton onPress={handleOpenFiltersModal}>
           <Funnel size={20} color={theme.COLORS.ORANGE_BASE} />
         </FilterButton>
       </SearchContent>
@@ -120,6 +132,8 @@ export function Home() {
         }}
         showsVerticalScrollIndicator={false}
       />
+
+      <FilterBottomSheet ref={filterBottomSheetRef} />
     </Container>
   );
 }
