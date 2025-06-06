@@ -60,7 +60,7 @@ export function SignIn() {
 
   return (
     <ScrollView
-      contentContainerStyle={{ flexGrow: 1 }}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 150 }}
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
     >
