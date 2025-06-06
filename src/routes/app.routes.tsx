@@ -10,6 +10,7 @@ import UserSvg from "@assets/user.svg";
 
 import { Home } from "@screens/Home";
 import { Profile } from "@screens/Profile";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type AppRoutes = {
   home: undefined;
@@ -29,6 +30,7 @@ function EmptyScreen() {
 
 export function AppRoutes() {
   const theme = useTheme();
+  const insets = useSafeAreaInsets();
 
   return (
     <Navigator
@@ -39,8 +41,8 @@ export function AppRoutes() {
         tabBarStyle: {
           backgroundColor: theme.COLORS.BACKGROUND,
           borderTopWidth: 0,
-          paddingBottom: Platform.OS === "ios" ? 20 : 10,
-          height: Platform.OS === "ios" ? 80 : 60,
+          paddingBottom: insets.bottom || 10,
+          height: 60 + (insets.bottom || 0),
         },
         tabBarLabelStyle: {
           fontSize: 12,
