@@ -1,22 +1,77 @@
-import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
+import { TouchableOpacity } from "react-native";
+import Checkbox from "expo-checkbox";
 
 export const Container = styled.View`
-  flex: 1;
   padding: 24px;
+  gap: 24px;
 `;
 
 export const Header = styled.View`
   flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-  margin-bottom: 16px;
+  align-items: center;
 `;
 
 export const Title = styled.Text`
-  font-size: 20px;
+  font-size: 18px;
   font-weight: bold;
-  color: #1a1a1a;
+  color: ${({ theme }) => theme.COLORS.GRAY_400};
 `;
 
-export const CloseButton = styled(TouchableOpacity)``;
+export const CloseButton = styled(TouchableOpacity)`
+  padding: 4px;
+`;
+
+export const Content = styled.View`
+  flex-direction: row;
+  gap: 16px;
+`;
+
+export const Column = styled.View`
+  flex: 1;
+`;
+
+export const CategorySection = styled.View`
+  gap: 12px;
+`;
+
+export const FilterLabel = styled.Text`
+  font-size: 14px;
+  font-weight: bold;
+  color: ${({ theme }) => theme.COLORS.GRAY_400};
+`;
+
+export const CategoryList = styled.View`
+  gap: 12px;
+`;
+
+export const CategoryItem = styled(TouchableOpacity)`
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+`;
+
+export const CategoryName = styled.Text`
+  font-size: 16px;
+  color: ${({ theme }) => theme.COLORS.GRAY_400};
+`;
+
+export const Footer = styled.View`
+  flex-direction: row;
+  gap: 12px;
+  margin-top: 8px;
+`;
+
+export const StyledCheckbox = styled(Checkbox).attrs(({ theme, value }) => ({
+  color: theme.COLORS.ORANGE_BASE,
+}))`
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  border-width: 1.5px;
+  border-color: ${({ value, theme }) =>
+    value ? theme.COLORS.ORANGE_BASE : theme.COLORS.GRAY_200};
+  background-color: ${({ value, theme }) =>
+    value ? theme.COLORS.ORANGE_BASE : "transparent"};
+`;

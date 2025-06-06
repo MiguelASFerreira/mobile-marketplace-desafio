@@ -1,3 +1,4 @@
+import { useRef, useState } from "react";
 import { ArrowRight, Funnel, Search } from "lucide-react-native";
 import {
   Container,
@@ -19,8 +20,8 @@ import { ProductCard } from "./components/ProductCard";
 import {
   FilterBottomSheet,
   FilterBottomSheetRefProps,
+  FilterData,
 } from "./components/FilterSheet";
-import { useRef } from "react";
 
 const data = [
   {
@@ -82,11 +83,16 @@ const data = [
 
 export function Home() {
   const theme = useTheme();
+  const [filters, setFilters] = useState<FilterData | null>(null);
 
   const filterBottomSheetRef = useRef<FilterBottomSheetRefProps>(null);
 
   function handleOpenFiltersModal() {
     filterBottomSheetRef.current?.open();
+  }
+
+  function handleApplyFilters(filters: FilterData) {
+    setFilters(filters);
   }
 
   return (
@@ -133,7 +139,10 @@ export function Home() {
         showsVerticalScrollIndicator={false}
       />
 
-      <FilterBottomSheet ref={filterBottomSheetRef} />
+      <FilterBottomSheet
+        ref={filterBottomSheetRef}
+        onApplyFilters={handleApplyFilters}
+      />
     </Container>
   );
 }
