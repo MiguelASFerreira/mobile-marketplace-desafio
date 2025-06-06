@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigationRoutesProps } from "@routes/auth.routes";
 import { ArrowRight, Lock, Mail } from "lucide-react-native";
@@ -11,11 +12,7 @@ import {
   Title,
 } from "./styles";
 import {
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
-  TouchableWithoutFeedback,
-  Keyboard,
 } from "react-native";
 
 import LogoMarketplace from "@assets/logo.png";
@@ -26,9 +23,8 @@ import { Button } from "@components/Button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { api } from "@lib/api";
 import { signIn } from "@api/sign-in";
-import { useMutation } from "@tanstack/react-query";
+import { showToast } from "@utils/toast";
 
 const signInForm = z.object({
   email: z.string().email(),
@@ -39,12 +35,9 @@ type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
   const navigation = useNavigation<AuthNavigationRoutesProps>();
+  const [isLoading, setIsLoading] = useState(false);
   const { control, handleSubmit } = useForm<SignInForm>({
     resolver: zodResolver(signInForm),
-  });
-
-  const { mutateAsync: authenticate, isPending } = useMutation({
-    mutationFn: signIn,
   });
 
   function handleNewAccount() {
@@ -52,10 +45,16 @@ export function SignIn() {
   }
 
   async function handleSignIn({ email, password }: SignInForm) {
+    setIsLoading(true);
     try {
-      await authenticate({ email, password });
-    } catch (error) {
-      console.log(error);
+      await signIn({ email, password });
+      showToast("success", "Login realizado com sucesso!");
+      setIsLoading(false);
+    } catch (e) {
+      showToast("error", "Não foi possível acessar sua conta.", "Tente novamente mais tarde.");
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -103,7 +102,7 @@ export function SignIn() {
             title="Acessar"
             RightIcon={ArrowRight}
             onPress={handleSubmit(handleSignIn)}
-            isLoading={isPending}
+            isLoading={isLoading}
           />
         </Content>
 
