@@ -9,6 +9,7 @@ import StoreSvg from "@assets/store.svg";
 import UserSvg from "@assets/user.svg";
 
 import { Home } from "@screens/Home";
+import { Profile } from "@screens/Profile";
 
 type AppRoutes = {
   home: undefined;
@@ -60,7 +61,7 @@ export function AppRoutes() {
 
       <Screen
         name="profile"
-        component={EmptyScreen}
+        component={Profile}
         options={{
           tabBarLabel: "PERFIL",
           tabBarIcon: ({ color }) => (
