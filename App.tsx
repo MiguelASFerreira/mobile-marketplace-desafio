@@ -2,6 +2,7 @@ import "react-native-reanimated";
 import { StatusBar } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { ThemeProvider } from "styled-components";
 import { useFonts, DMSans_700Bold } from "@expo-google-fonts/dm-sans";
@@ -15,6 +16,7 @@ import { Loading } from "@components/Loading/";
 import { Routes } from "./src/routes";
 
 import theme from "./src/theme";
+import { queryClient } from "@lib/react-query";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -26,16 +28,18 @@ export default function App() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <BottomSheetModalProvider>
-          <ThemeProvider theme={theme}>
-            <StatusBar
-              barStyle="dark-content"
-              backgroundColor="transparent"
-              translucent
-            />
-            {fontsLoaded ? <Routes /> : <Loading />}
-          </ThemeProvider>
-        </BottomSheetModalProvider>
+        <QueryClientProvider client={queryClient}>
+          <BottomSheetModalProvider>
+            <ThemeProvider theme={theme}>
+              <StatusBar
+                barStyle="dark-content"
+                backgroundColor="transparent"
+                translucent
+              />
+              {fontsLoaded ? <Routes /> : <Loading />}
+            </ThemeProvider>
+          </BottomSheetModalProvider>
+        </QueryClientProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
