@@ -25,6 +25,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { uploadFile } from "@api/upload-file";
 import { signUp } from "@api/sign-up";
 import { showToast } from "@utils/toast";
+import { useAuth } from "@hooks/useAuth";
 
 const signUpForm = z
   .object({
@@ -61,6 +62,7 @@ const signUpForm = z
 type SignUpForm = z.infer<typeof signUpForm>;
 
 export function SignUp() {
+  const { singInSeller } = useAuth();
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -93,6 +95,7 @@ export function SignUp() {
       };
 
       await signUp(payload);
+      await singInSeller(payload.email, payload.password);
 
       showToast("success", "Cadastro realizado com sucesso!");
       navigation.goBack();

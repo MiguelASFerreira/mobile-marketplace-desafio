@@ -21,9 +21,9 @@ import { Button } from "@components/Button";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { signIn } from "@api/sign-in";
 import { showToast } from "@utils/toast";
 import { isAxiosError, type AxiosError } from "axios";
+import { useAuth } from "@hooks/useAuth";
 
 const signInForm = z.object({
   email: z
@@ -41,6 +41,7 @@ const signInForm = z.object({
 type SignInForm = z.infer<typeof signInForm>;
 
 export function SignIn() {
+  const { singInSeller } = useAuth();
   const navigation = useNavigation<AuthNavigationRoutesProps>();
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -59,11 +60,10 @@ export function SignIn() {
   async function handleSignIn({ email, password }: SignInForm) {
     setIsLoading(true);
     try {
-      await signIn({ email, password });
+      await singInSeller(email, password);
       showToast("success", "Login realizado com sucesso!");
       setIsLoading(false);
     } catch (e: AxiosError | unknown) {
-      console.log(e);
       if (isAxiosError(e)) {
         if (e.response?.status === 403) {
           showToast("error", "E-mail ou senha inválidos.");
