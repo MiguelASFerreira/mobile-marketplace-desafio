@@ -25,29 +25,28 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { uploadFile } from "@api/upload-file";
 import { signUp } from "@api/sign-up";
 import { showToast } from "@utils/toast";
-import { formatPhone } from "@utils/format-phone";
-import { set } from "zod/v4";
 
 const signUpForm = z
   .object({
-    name: z.string().nonempty({ message: "Nome é obrigatório" }),
-    email: z.string().email({
-      message: "E-mail Inválido",
+    name: z.string({ message: "Nome é obrigatório" }),
+    email: z
+      .string({
+        message: "E-mail é obrigatório",
+      })
+      .email({
+        message: "E-mail Inválido",
+      }),
+    password: z.string({ message: "Senha é obrigatória" }),
+    passwordConfirmation: z.string({
+      message: "Confirmação de senha é obrigatória",
     }),
-    password: z.string().nonempty({ message: "Senha é obrigatória" }),
-    passwordConfirmation: z
-      .string()
-      .nonempty({ message: "Confirmação de senha é obrigatória" }),
-    phone: z.string().nonempty({ message: "Telefone é obrigatório" }),
+    phone: z.string({ message: "Telefone é obrigatório" }),
     file: z
       .object({
-        uri: z.string().nonempty("URI da imagem é obrigatória"),
-        name: z.string().nonempty("Nome da imagem é obrigatório"),
-        type: z.string().nonempty("Tipo da imagem é obrigatório"),
-      })
-      .refine((file) => !!file.uri, {
-        message: "Imagem é obrigatória",
-      }),
+        uri: z.string(),
+        name: z.string(),
+        type: z.string(),
+      }, { message: "Imagem é obrigatória",})
   })
   .refine(
     (data) => {
@@ -64,7 +63,11 @@ type SignUpForm = z.infer<typeof signUpForm>;
 export function SignUp() {
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState(false);
-  const { control, handleSubmit, setValue } = useForm<SignUpForm>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignUpForm>({
     resolver: zodResolver(signUpForm),
   });
 
@@ -89,11 +92,10 @@ export function SignUp() {
         avatarId,
       };
 
-
       await signUp(payload);
 
       showToast("success", "Cadastro realizado com sucesso!");
-      navigation.goBack()
+      navigation.goBack();
     } catch (error) {
       console.error("Erro no cadastro:", error);
       showToast(
@@ -129,6 +131,7 @@ export function SignUp() {
                   onChangeImage={(uri) =>
                     onChange({ uri, name: "profile.jpg", type: "image/jpeg" })
                   }
+                  error={errors.file?.message}
                 />
               )}
             />
@@ -142,6 +145,7 @@ export function SignUp() {
                   placeholder="Seu nome completo"
                   LeftIcon={User}
                   onChangeText={onChange}
+                  error={errors.name?.message}
                 />
               )}
             />
@@ -156,6 +160,7 @@ export function SignUp() {
                   keyboardType="phone-pad"
                   LeftIcon={Phone}
                   onChangeText={onChange}
+                  error={errors.phone?.message}
                 />
               )}
             />
@@ -172,6 +177,7 @@ export function SignUp() {
                   keyboardType="email-address"
                   LeftIcon={Mail}
                   onChangeText={onChange}
+                  error={errors.email?.message}
                 />
               )}
             />
@@ -185,6 +191,7 @@ export function SignUp() {
                   placeholder="Sua senha de acesso"
                   LeftIcon={Lock}
                   onChangeText={onChange}
+                  error={errors.password?.message}
                 />
               )}
             />
@@ -198,6 +205,7 @@ export function SignUp() {
                   placeholder="Confirme sua senha"
                   LeftIcon={Lock}
                   onChangeText={onChange}
+                  error={errors.passwordConfirmation?.message}
                 />
               )}
             />

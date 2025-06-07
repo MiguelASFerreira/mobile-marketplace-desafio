@@ -11,9 +11,7 @@ import {
   Subtitle,
   Title,
 } from "./styles";
-import {
-  ScrollView,
-} from "react-native";
+import { ScrollView } from "react-native";
 
 import LogoMarketplace from "@assets/logo.png";
 
@@ -25,10 +23,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
 import { signIn } from "@api/sign-in";
 import { showToast } from "@utils/toast";
+import { isAxiosError, type AxiosError } from "axios";
 
 const signInForm = z.object({
-  email: z.string().email(),
-  password: z.string(),
+  email: z
+    .string({
+      message: "E-mail é obrigatório",
+    })
+    .email({
+      message: "E-mail inválido",
+    }),
+  password: z.string({
+    message: "Senha é obrigatória",
+  }),
 });
 
 type SignInForm = z.infer<typeof signInForm>;
@@ -36,9 +43,14 @@ type SignInForm = z.infer<typeof signInForm>;
 export function SignIn() {
   const navigation = useNavigation<AuthNavigationRoutesProps>();
   const [isLoading, setIsLoading] = useState(false);
-  const { control, handleSubmit } = useForm<SignInForm>({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SignInForm>({
     resolver: zodResolver(signInForm),
   });
+
 
   function handleNewAccount() {
     navigation.navigate("signUp");
@@ -50,8 +62,19 @@ export function SignIn() {
       await signIn({ email, password });
       showToast("success", "Login realizado com sucesso!");
       setIsLoading(false);
-    } catch (e) {
-      showToast("error", "Não foi possível acessar sua conta.", "Tente novamente mais tarde.");
+    } catch (e: AxiosError | unknown) {
+      console.log(e);
+      if (isAxiosError(e)) {
+        if (e.response?.status === 403) {
+          showToast("error", "E-mail ou senha inválidos.");
+          return;
+        }
+      }
+      showToast(
+        "error",
+        "Não foi possível acessar sua conta.",
+        "Tente novamente mais tarde."
+      );
       setIsLoading(false);
     } finally {
       setIsLoading(false);
@@ -81,6 +104,7 @@ export function SignIn() {
                 keyboardType="email-address"
                 LeftIcon={Mail}
                 onChangeText={onChange}
+                error={errors.email?.message}
               />
             )}
           />
@@ -94,6 +118,7 @@ export function SignIn() {
                 placeholder="Sua senha de acesso"
                 LeftIcon={Lock}
                 onChangeText={onChange}
+                error={errors.password?.message}
               />
             )}
           />
