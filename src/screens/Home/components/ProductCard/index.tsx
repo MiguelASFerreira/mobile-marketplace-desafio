@@ -5,6 +5,7 @@ import {
   ProductName,
   PriceLabel,
   PriceValue,
+  ProductInfo,
 } from "./styles";
 
 type ProductCartType = {
@@ -23,15 +24,25 @@ type ProductCardProps = {
 
 export function ProductCard({ product }: ProductCardProps) {
   const priceInReais = product.priceInCents / 100;
-  const imageUrl = product.attachments[0]?.url;
+  const fullUrl = product.attachments[0].url;
+  const parts = fullUrl.split("/attachments/");
+  const image = parts[1];
 
   return (
     <Container>
-      {imageUrl && <ProductImage source={{ uri: imageUrl }} resizeMode="cover" />}
-      <ProductName>{product.title}</ProductName>
-      <PriceLabel>
-        R$ <PriceValue>{priceInReais.toFixed(2).replace(".", ",")}</PriceValue>
-      </PriceLabel>
+      <ProductImage
+        source={{
+          uri: `${process.env.EXPO_PUBLIC_API_URL}/attachments/${image}`,
+        }}
+        resizeMode="cover"
+      />
+      <ProductInfo>
+        <ProductName>{product.title}</ProductName>
+        <PriceLabel>
+          R${" "}
+          <PriceValue>{priceInReais.toFixed(2).replace(".", ",")}</PriceValue>
+        </PriceLabel>
+      </ProductInfo>
     </Container>
   );
 }
