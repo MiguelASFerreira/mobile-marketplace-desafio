@@ -23,7 +23,9 @@ import {
   FilterData,
 } from "./components/FilterSheet";
 import { useNavigation } from "@react-navigation/native";
-import type { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
+import { useAuth } from "@hooks/useAuth";
+import defaultUserPhotoImg from "@assets/userPhotoDefault.png";
 
 const data = [
   {
@@ -84,6 +86,7 @@ const data = [
 ];
 
 export function Home() {
+  const { seller } = useAuth();
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const theme = useTheme();
   const [filters, setFilters] = useState<FilterData | null>(null);
@@ -106,13 +109,13 @@ export function Home() {
     <Container>
       <Header>
         <ProfileImage
-          source={{
+          source={seller.avatar ? {
             uri: "https://github.com/MiguelASFerreira.png",
-          }}
+          } : defaultUserPhotoImg}
         />
 
         <ProfileContent>
-          <ProfileName>Olá, Miguel!</ProfileName>
+          <ProfileName>Olá, {seller.name}!</ProfileName>
           <ProfileView onPress={handleProfile}>
             <ProfileViewText>Ver perfil</ProfileViewText>
             <ArrowRight size={16} color={theme.COLORS.ORANGE_BASE} />
