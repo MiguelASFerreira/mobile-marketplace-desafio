@@ -5,6 +5,7 @@ import {
   useCallback,
   useMemo,
   useState,
+  useEffect,
 } from "react";
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -29,6 +30,9 @@ import {
 } from "./styles";
 import { Button } from "@components/Button";
 import { Input } from "@components/Input";
+import { showToast } from "@utils/toast";
+import { Category, getCategories } from "@api/get-categories";
+import { Loading } from "@components/Loading";
 
 export type FilterBottomSheetRefProps = {
   open: () => void;
@@ -45,21 +49,10 @@ export type FilterData = {
   categories: string[];
 };
 
-const categoriesData = [
-  "Brinquedo",
-  "Móvel",
-  "Papelaria",
-  "Saúde & Beleza",
-  "Utensílio",
-  "Vestuário",
-].map((label, index) => ({
-  id: index.toString(),
-  label
-}));
-
 export const FilterBottomSheet = forwardRef<FilterBottomSheetRefProps, Props>(
   ({ onApplyFilters }, ref) => {
-    const [categories, setCategories] = useState(categoriesData);
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [isLoadingCategories, setIsLoadingCategories] = useState(true);
     const [minValue, setMinValue] = useState("");
     const [maxValue, setMaxValue] = useState("");
 
@@ -124,6 +117,23 @@ export const FilterBottomSheet = forwardRef<FilterBottomSheetRefProps, Props>(
       handleClose();
     }
 
+    useEffect(() => {
+      async function fetchCategories() {
+        try {
+          setIsLoadingCategories(true);
+          const response = await getCategories();
+          setCategories(response);
+          setIsLoadingCategories(false);
+        } catch (error) {
+          setIsLoadingCategories(false);
+          showToast("error", "Erro ao carregar categorias");
+        } finally {
+          setIsLoadingCategories(false);
+        }
+      }
+      fetchCategories();
+    }, []);
+
     return (
       <BottomSheet
         ref={bottomSheetModalRef}
@@ -168,21 +178,25 @@ export const FilterBottomSheet = forwardRef<FilterBottomSheetRefProps, Props>(
 
             <CategorySection>
               <FilterLabel>Categoria</FilterLabel>
-              <CategoryList>
-                {categories.map((category) => (
-                  <CategoryItem
-                    key={category.id}
-                    activeOpacity={0.8}
-                    onPress={() => handleSelectCategory(category.id)}
-                  >
-                    <StyledCheckbox
-                      value={selectedCategories.includes(category.id)}
-                      onValueChange={() => handleSelectCategory(category.id)}
-                    />
-                    <CategoryName>{category.label}</CategoryName>
-                  </CategoryItem>
-                ))}
-              </CategoryList>
+              {isLoadingCategories ? (
+                <Loading />
+              ) : (
+                <CategoryList>
+                  {categories.map((category) => (
+                    <CategoryItem
+                      key={category.id}
+                      activeOpacity={0.8}
+                      onPress={() => handleSelectCategory(category.id)}
+                    >
+                      <StyledCheckbox
+                        value={selectedCategories.includes(category.id)}
+                        onValueChange={() => handleSelectCategory(category.id)}
+                      />
+                      <CategoryName>{category.title}</CategoryName>
+                    </CategoryItem>
+                  ))}
+                </CategoryList>
+              )}
             </CategorySection>
 
             <Footer>
