@@ -34,7 +34,7 @@ export function Home() {
   const { seller } = useAuth();
   const navigation = useNavigation<AppNavigatorRoutesProps>();
   const theme = useTheme();
-
+  const image = seller?.avatar?.url?.split("/attachments/")[1] ?? undefined;
   const [products, setProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<FilterData | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -85,7 +85,6 @@ export function Home() {
       }
 
       const query = params.toString() ? `?${params.toString()}` : "";
-      console.log("Query:", query);
       const response = await getAllProducts({ query });
 
       setProducts(response.products);
@@ -111,7 +110,7 @@ export function Home() {
           source={
             seller.avatar
               ? {
-                  uri: "https://github.com/MiguelASFerreira.png",
+                  uri: `${process.env.EXPO_PUBLIC_API_URL}/attachments/${image}`,
                 }
               : defaultUserPhotoImg
           }

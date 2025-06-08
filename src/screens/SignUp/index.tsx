@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView } from "react-native";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { ArrowRight, Lock, Mail, Phone, User } from "lucide-react-native";
 import {
@@ -42,12 +42,14 @@ const signUpForm = z
       message: "Confirmação de senha é obrigatória",
     }),
     phone: z.string({ message: "Telefone é obrigatório" }),
-    file: z
-      .object({
+    file: z.object(
+      {
         uri: z.string(),
         name: z.string(),
         type: z.string(),
-      }, { message: "Imagem é obrigatória",})
+      },
+      { message: "Imagem é obrigatória" }
+    ),
   })
   .refine(
     (data) => {
@@ -112,126 +114,127 @@ export function SignUp() {
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: 150 }}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <Container>
-        <Content>
-          <Logo source={LogoMarketplace} />
+    <KeyboardAvoidingView>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Container>
+          <Content>
+            <Logo source={LogoMarketplace} />
 
-          <Title>Crie sua conta</Title>
-          <Subtitle>Informe os seus dados pessoais e de acesso</Subtitle>
+            <Title>Crie sua conta</Title>
+            <Subtitle>Informe os seus dados pessoais e de acesso</Subtitle>
 
-          <Fieldset legend="Perfil">
-            <Controller
-              control={control}
-              name="file"
-              render={({ field: { onChange, value } }) => (
-                <FileInput
-                  defaultValue={value?.uri}
-                  onChangeImage={(uri) =>
-                    onChange({ uri, name: "profile.jpg", type: "image/jpeg" })
-                  }
-                  error={errors.file?.message}
-                />
-              )}
+            <Fieldset legend="Perfil">
+              <Controller
+                control={control}
+                name="file"
+                render={({ field: { onChange, value } }) => (
+                  <FileInput
+                    defaultValue={value?.uri}
+                    onChangeImage={(uri) =>
+                      onChange({ uri, name: "profile.jpg", type: "image/jpeg" })
+                    }
+                    error={errors.file?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange } }) => (
+                  <Input
+                    label="Nome"
+                    placeholder="Seu nome completo"
+                    LeftIcon={User}
+                    onChangeText={onChange}
+                    error={errors.name?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="phone"
+                render={({ field: { onChange } }) => (
+                  <Input
+                    label="Telefone"
+                    placeholder="(00) 00000-0000"
+                    keyboardType="phone-pad"
+                    LeftIcon={Phone}
+                    onChangeText={onChange}
+                    error={errors.phone?.message}
+                  />
+                )}
+              />
+            </Fieldset>
+
+            <Fieldset legend="Acesso">
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange } }) => (
+                  <Input
+                    label="E-mail"
+                    placeholder="mail@exemplo.br"
+                    keyboardType="email-address"
+                    LeftIcon={Mail}
+                    onChangeText={onChange}
+                    error={errors.email?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange } }) => (
+                  <PasswordInput
+                    label="Senha"
+                    placeholder="Sua senha de acesso"
+                    LeftIcon={Lock}
+                    onChangeText={onChange}
+                    error={errors.password?.message}
+                  />
+                )}
+              />
+
+              <Controller
+                control={control}
+                name="passwordConfirmation"
+                render={({ field: { onChange } }) => (
+                  <PasswordInput
+                    label="Confirmação de senha"
+                    placeholder="Confirme sua senha"
+                    LeftIcon={Lock}
+                    onChangeText={onChange}
+                    error={errors.passwordConfirmation?.message}
+                  />
+                )}
+              />
+            </Fieldset>
+
+            <Button
+              title="Acessar"
+              RightIcon={ArrowRight}
+              onPress={handleSubmit(handleSignUp)}
+              isLoading={isLoading}
             />
+          </Content>
 
-            <Controller
-              control={control}
-              name="name"
-              render={({ field: { onChange } }) => (
-                <Input
-                  label="Nome"
-                  placeholder="Seu nome completo"
-                  LeftIcon={User}
-                  onChangeText={onChange}
-                  error={errors.name?.message}
-                />
-              )}
+          <Footer>
+            <FooterText>Ainda não tem uma conta?</FooterText>
+            <Button
+              title="Acessar"
+              variant="outline"
+              RightIcon={ArrowRight}
+              onPress={handleGoBack}
             />
-
-            <Controller
-              control={control}
-              name="phone"
-              render={({ field: { onChange } }) => (
-                <Input
-                  label="Telefone"
-                  placeholder="(00) 00000-0000"
-                  keyboardType="phone-pad"
-                  LeftIcon={Phone}
-                  onChangeText={onChange}
-                  error={errors.phone?.message}
-                />
-              )}
-            />
-          </Fieldset>
-
-          <Fieldset legend="Acesso">
-            <Controller
-              control={control}
-              name="email"
-              render={({ field: { onChange } }) => (
-                <Input
-                  label="E-mail"
-                  placeholder="mail@exemplo.br"
-                  keyboardType="email-address"
-                  LeftIcon={Mail}
-                  onChangeText={onChange}
-                  error={errors.email?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="password"
-              render={({ field: { onChange } }) => (
-                <PasswordInput
-                  label="Senha"
-                  placeholder="Sua senha de acesso"
-                  LeftIcon={Lock}
-                  onChangeText={onChange}
-                  error={errors.password?.message}
-                />
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="passwordConfirmation"
-              render={({ field: { onChange } }) => (
-                <PasswordInput
-                  label="Confirmação de senha"
-                  placeholder="Confirme sua senha"
-                  LeftIcon={Lock}
-                  onChangeText={onChange}
-                  error={errors.passwordConfirmation?.message}
-                />
-              )}
-            />
-          </Fieldset>
-
-          <Button
-            title="Acessar"
-            RightIcon={ArrowRight}
-            onPress={handleSubmit(handleSignUp)}
-            isLoading={isLoading}
-          />
-        </Content>
-
-        <Footer>
-          <FooterText>Ainda não tem uma conta?</FooterText>
-          <Button
-            title="Acessar"
-            variant="outline"
-            RightIcon={ArrowRight}
-            onPress={handleGoBack}
-          />
-        </Footer>
-      </Container>
-    </ScrollView>
+          </Footer>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

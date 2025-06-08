@@ -11,7 +11,7 @@ import {
   Subtitle,
   Title,
 } from "./styles";
-import { ScrollView } from "react-native";
+import { KeyboardAvoidingView, ScrollView } from "react-native";
 
 import LogoMarketplace from "@assets/logo.png";
 
@@ -52,7 +52,6 @@ export function SignIn() {
     resolver: zodResolver(signInForm),
   });
 
-
   function handleNewAccount() {
     navigation.navigate("signUp");
   }
@@ -82,65 +81,66 @@ export function SignIn() {
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: 150 }}
-      keyboardShouldPersistTaps="handled"
-      showsVerticalScrollIndicator={false}
-    >
-      <Container>
-        <Content>
-          <Logo source={LogoMarketplace} />
+    <KeyboardAvoidingView>
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        showsVerticalScrollIndicator={false}
+      >
+        <Container>
+          <Content>
+            <Logo source={LogoMarketplace} />
 
-          <Title>Acesse sua Conta</Title>
-          <Subtitle>Informe seu e-mail e senha para entrar</Subtitle>
+            <Title>Acesse sua Conta</Title>
+            <Subtitle>Informe seu e-mail e senha para entrar</Subtitle>
 
-          <Controller
-            control={control}
-            name="email"
-            render={({ field: { onChange } }) => (
-              <Input
-                label="E-mail"
-                placeholder="mail@exemplo.br"
-                keyboardType="email-address"
-                LeftIcon={Mail}
-                onChangeText={onChange}
-                error={errors.email?.message}
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="email"
+              render={({ field: { onChange } }) => (
+                <Input
+                  label="E-mail"
+                  placeholder="mail@exemplo.br"
+                  keyboardType="email-address"
+                  LeftIcon={Mail}
+                  onChangeText={onChange}
+                  error={errors.email?.message}
+                />
+              )}
+            />
 
-          <Controller
-            control={control}
-            name="password"
-            render={({ field: { onChange } }) => (
-              <PasswordInput
-                label="Senha"
-                placeholder="Sua senha de acesso"
-                LeftIcon={Lock}
-                onChangeText={onChange}
-                error={errors.password?.message}
-              />
-            )}
-          />
+            <Controller
+              control={control}
+              name="password"
+              render={({ field: { onChange } }) => (
+                <PasswordInput
+                  label="Senha"
+                  placeholder="Sua senha de acesso"
+                  LeftIcon={Lock}
+                  onChangeText={onChange}
+                  error={errors.password?.message}
+                />
+              )}
+            />
 
-          <Button
-            title="Acessar"
-            RightIcon={ArrowRight}
-            onPress={handleSubmit(handleSignIn)}
-            isLoading={isLoading}
-          />
-        </Content>
+            <Button
+              title="Acessar"
+              RightIcon={ArrowRight}
+              onPress={handleSubmit(handleSignIn)}
+              isLoading={isLoading}
+            />
+          </Content>
 
-        <Footer>
-          <FooterText>Ainda não tem uma conta?</FooterText>
-          <Button
-            title="Cadastrar"
-            variant="outline"
-            RightIcon={ArrowRight}
-            onPress={handleNewAccount}
-          />
-        </Footer>
-      </Container>
-    </ScrollView>
+          <Footer>
+            <FooterText>Ainda não tem uma conta?</FooterText>
+            <Button
+              title="Cadastrar"
+              variant="outline"
+              RightIcon={ArrowRight}
+              onPress={handleNewAccount}
+            />
+          </Footer>
+        </Container>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }

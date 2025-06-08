@@ -4,13 +4,15 @@ import styled from "styled-components/native";
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
-  padding: 0 40px;
+  padding: 64px 40px 0;
+
 `;
 
 export const Content = styled.View`
   flex: 1;
   justify-content: center;
   gap: 15px;
+  margin-bottom: 154px;
 `;
 
 export const Logo = styled.Image`
