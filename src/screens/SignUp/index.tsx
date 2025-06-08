@@ -102,7 +102,6 @@ export function SignUp() {
       showToast("success", "Cadastro realizado com sucesso!");
       navigation.goBack();
     } catch (error) {
-      console.error("Erro no cadastro:", error);
       showToast(
         "error",
         "Não foi possível realizar o cadastro.",

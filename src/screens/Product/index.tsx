@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Image } from "react-native";
+import { Image, Linking } from "react-native";
 import {
   Container,
   Content,
@@ -52,7 +52,6 @@ export function Product() {
     setProduct(productResponse.product);
     setViewProduct(viewsResponse.amount);
   } catch (error) {
-    console.error("Erro ao buscar produto:", error);
     showToast("error", "Erro ao carregar os detalhes do produto");
   } finally {
     setIsLoading(false);
@@ -62,6 +61,18 @@ export function Product() {
 function handleBack() {
   navigation.goBack();
 }
+
+function handlePhoneContact() {
+    const phoneNumber = `55${product.owner.phone.replace(/\D/g, '')}`
+    const message = encodeURIComponent(
+      `Olá, ${product.owner.name}! Estou interessado no produto "${product.title}"!`,
+    )
+    const whatsAppUrl = `https://wa.me/${phoneNumber}?text=${message}`
+
+    Linking.openURL(whatsAppUrl).catch(() => {
+      showToast("error", "Erro ao abrir o WhatsApp");
+    })
+  }
 
 
   useEffect(() => {
@@ -75,7 +86,6 @@ function handleBack() {
       : undefined;
   }, [product]);
 
-  console.log("Product", product);
 
   if (isLoading) {
   return <Loading />;
@@ -123,7 +133,7 @@ function handleBack() {
       <Footer>
         <FooterPrice>R$ {product.priceInCents / 100}</FooterPrice>
         <ContactButton>
-          <ContactButtonText>
+          <ContactButtonText onPress={handlePhoneContact}>
             Entrar em contato{"\n"} com {product.owner.name}
           </ContactButtonText>
         </ContactButton>
