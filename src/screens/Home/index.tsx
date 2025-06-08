@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Funnel, Search } from "lucide-react-native";
 import {
   Container,
@@ -15,7 +15,7 @@ import {
 } from "./styles";
 import { useTheme } from "styled-components/native";
 import { Input } from "@components/Input";
-import { FlatList } from "react-native";
+import { FlatList, Text } from "react-native";
 import { ProductCard } from "./components/ProductCard";
 import {
   FilterBottomSheet,
@@ -103,67 +103,87 @@ export function Home() {
     fetchProducts();
   }, [filters, searchQuery]);
 
+  const avatarUrl = useMemo(() => {
+    const image = seller?.avatar?.url?.split("/attachments/")[1];
+    return image
+      ? `${process.env.EXPO_PUBLIC_API_URL}/attachments/${image}`
+      : undefined;
+  }, [seller]);
+
   return (
-    <Container>
-      <Header>
-        <ProfileImage
-          source={
-            seller.avatar
-              ? {
-                  uri: `${process.env.EXPO_PUBLIC_API_URL}/attachments/${image}`,
-                }
-              : defaultUserPhotoImg
-          }
-        />
-
-        <ProfileContent>
-          <ProfileName>Olá, {seller.name}!</ProfileName>
-          <ProfileView onPress={handleProfile}>
-            <ProfileViewText>Ver perfil</ProfileViewText>
-            <ArrowRight size={16} color={theme.COLORS.ORANGE_BASE} />
-          </ProfileView>
-        </ProfileContent>
-      </Header>
-
-      <SearchTitle>Explore produtos</SearchTitle>
-      <SearchContent>
-        <InputWrapper>
-          <Input
-            placeholder="Pesquisar"
-            LeftIcon={Search}
-            value={searchQuery}
-            onChangeText={handleSearch}
+    <>
+      <Container>
+        <Header>
+          <ProfileImage
+            source={
+              avatarUrl
+                ? {
+                    uri: avatarUrl,
+                  }
+                : defaultUserPhotoImg
+            }
           />
-        </InputWrapper>
 
-        <FilterButton onPress={handleOpenFiltersModal}>
-          <Funnel size={20} color={theme.COLORS.ORANGE_BASE} />
-        </FilterButton>
-      </SearchContent>
+          <ProfileContent>
+            <ProfileName>Olá, {seller.name}!</ProfileName>
+            <ProfileView onPress={handleProfile}>
+              <ProfileViewText>Ver perfil</ProfileViewText>
+              <ArrowRight size={16} color={theme.COLORS.ORANGE_BASE} />
+            </ProfileView>
+          </ProfileContent>
+        </Header>
 
-      {isLoading ? (
-        <Loading />
-      ) : (
-        <FlatList
-          data={products}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ProductCard product={item} />}
-          contentContainerStyle={{ paddingVertical: 16 }}
-          numColumns={2}
-          columnWrapperStyle={{
-            gap: "8%",
-            width: "100%",
-            marginBottom: 8,
-            justifyContent: "space-between",
-          }}
-          showsVerticalScrollIndicator={false}
-        />
-      )}
+        <SearchTitle>Explore produtos</SearchTitle>
+        <SearchContent>
+          <InputWrapper>
+            <Input
+              placeholder="Pesquisar"
+              LeftIcon={Search}
+              value={searchQuery}
+              onChangeText={handleSearch}
+            />
+          </InputWrapper>
 
+          <FilterButton onPress={handleOpenFiltersModal}>
+            <Funnel size={20} color={theme.COLORS.ORANGE_BASE} />
+          </FilterButton>
+        </SearchContent>
+
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <FlatList
+            data={products}
+            keyExtractor={(item) => item.id}
+            renderItem={({ item }) => (
+              <ProductCard
+                product={item}
+                onPress={() =>
+                  navigation.navigate("product", { productId: item.id })
+                }
+              />
+            )}
+            contentContainerStyle={{ paddingBottom: 100, paddingTop: 16 }}
+            numColumns={2}
+            columnWrapperStyle={{
+              justifyContent: "space-between",
+              paddingBottom: 12,
+              gap: 8,
+            }}
+            style={{ paddingBottom: 12 }}
+            showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <Text style={{ textAlign: "center", marginTop: 24 }}>
+                Nenhum produto encontrado.
+              </Text>
+            }
+          />
+        )}
+      </Container>
       <FilterBottomSheet
         ref={filterBottomSheetRef}
         onApplyFilters={handleApplyFilters}
       />
-    </Container>
+    </>
   );
 }

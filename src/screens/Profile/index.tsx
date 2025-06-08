@@ -114,7 +114,6 @@ export function Profile() {
       await updateSellerProfile(sellerUpdated);
 
       showToast("success", "Perfil atualizado com sucesso!");
-      console.log("Payload to update profile:", payload);
       navigation.reset({
         index: 0,
         routes: [{ name: "profile" }],

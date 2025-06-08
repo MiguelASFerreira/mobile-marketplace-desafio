@@ -141,6 +141,8 @@ export const FilterBottomSheet = forwardRef<FilterBottomSheetRefProps, Props>(
         snapPoints={snapPoints}
         backdropComponent={renderBackdrop}
         backgroundStyle={{ backgroundColor: "white" }}
+        enableContentPanningGesture={false}
+        enableHandlePanningGesture={true}
         handleIndicatorStyle={{ backgroundColor: "#ccc", width: 50 }}
       >
         <BottomSheetScrollView>

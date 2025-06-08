@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useMemo } from "react";
+import { TouchableOpacity } from "react-native";
 import {
   Container,
   ProductImage,
@@ -7,6 +8,8 @@ import {
   PriceValue,
   ProductInfo,
 } from "./styles";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRoutesProps } from "@routes/app.routes";
 
 type ProductCartType = {
   id: string;
@@ -20,29 +23,37 @@ type ProductCartType = {
 
 type ProductCardProps = {
   product: ProductCartType;
+  onPress?: () => void;
 };
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, onPress }: ProductCardProps) {
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
+
+  const productUrl = useMemo(() => {
+    const image = product?.attachments[0]?.url?.split("/attachments/")[1];
+    return `${process.env.EXPO_PUBLIC_API_URL}/attachments/${image}`;
+  }, [product]);
   const priceInReais = product.priceInCents / 100;
-  const fullUrl = product.attachments[0].url;
-  const parts = fullUrl.split("/attachments/");
-  const image = parts[1];
 
   return (
-    <Container>
-      <ProductImage
-        source={{
-          uri: `${process.env.EXPO_PUBLIC_API_URL}/attachments/${image}`,
-        }}
-        resizeMode="cover"
-      />
-      <ProductInfo>
-        <ProductName>{product.title}</ProductName>
-        <PriceLabel>
-          R${" "}
-          <PriceValue>{priceInReais.toFixed(2).replace(".", ",")}</PriceValue>
-        </PriceLabel>
-      </ProductInfo>
-    </Container>
+    <TouchableOpacity
+      onPress={onPress}
+    >
+      <Container>
+        <ProductImage
+          source={{
+            uri: productUrl,
+          }}
+          resizeMode="cover"
+        />
+        <ProductInfo>
+          <ProductName>{product.title}</ProductName>
+          <PriceLabel>
+            R${" "}
+            <PriceValue>{priceInReais.toFixed(2).replace(".", ",")}</PriceValue>
+          </PriceLabel>
+        </ProductInfo>
+      </Container>
+    </TouchableOpacity>
   );
 }

@@ -3,9 +3,9 @@ import styled from "styled-components/native";
 
 export const Container = styled(View)`
   width: 167px;
+  height: 190px;
   background-color: ${({ theme }) => theme.COLORS.BACKGROUND};
   border-radius: 12px;
-  overflow: hidden;
   border: 1px solid ${({ theme }) => theme.COLORS.GRAY_100};
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
 `;

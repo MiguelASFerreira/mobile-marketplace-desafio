@@ -11,6 +11,7 @@ import UserSvg from "@assets/user.svg";
 import { Home } from "@screens/Home";
 import { Profile } from "@screens/Profile";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { Product } from "@screens/Product";
 
 type AppRoutes = {
   home: undefined;
@@ -23,10 +24,6 @@ type AppRoutes = {
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
-
-function EmptyScreen() {
-  return null;
-}
 
 export function AppRoutes() {
   const theme = useTheme();
@@ -74,7 +71,7 @@ export function AppRoutes() {
 
       <Screen
         name="product"
-        component={EmptyScreen}
+        component={Product}
         options={{
           tabBarButton: () => null,
         }}
